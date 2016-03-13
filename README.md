@@ -1,6 +1,9 @@
 # adf-widget-sensummary
 
-sensummary widget for the [angular-dashboard-framework](https://github.com/sdorra/angular-dashboard-framework).
+A basic widget that shows a summary view of Sensue nodes health reports.
+The widget is built using [D3.js](https://d3js.org/) for the  [angular-dashboard-framework](https://github.com/sdorra/angular-dashboard-framework).
+
+The original code for the viewer component: https://github.com/roozbehf/sensummary
 
 ## Build
 
