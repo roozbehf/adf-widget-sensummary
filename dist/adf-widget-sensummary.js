@@ -21,7 +21,7 @@ angular.module('adf.widget.sensummary', ['adf.provider'])
       });
   }])
 
-angular.module("adf.widget.sensummary").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sensummary/src/edit.html","<form role=form><div class=form-group><label for=sensuAPI>Sensu API</label> <input type=text class=form-control id=sensuAPI ng-model=config.senserver></div><div class=form-group><label for=uchiwaURL>Uchiwa URL for the Datacenter</label> <input type=text class=form-control id=uchiwaURL ng-model=config.uchiwa_url></div></form>");
+angular.module("adf.widget.sensummary").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sensummary/src/edit.html","<form role=form><div class=form-group><label for=sensuAPI>Sensu API URL</label> <input type=text class=form-control id=sensuAPI ng-model=config.senserver></div><div class=form-group><label for=uchiwaURL>Uchiwa front URL (for the datacenter)</label> <input type=text class=form-control id=uchiwaURL ng-model=config.uchiwa_url></div></form>");
 $templateCache.put("{widgetsPath}/sensummary/src/view.html","<div><div class=\"alert alert-info\" ng-if=!data>Please point the widget to a Sensu server in the configuration.</div><div ng-if=data><sensu-nodes data=data></sensu-nodes></div></div>");}]);
 //   PoC of an D3 View for a Sensummary Dashboard
 //   (as an AngularJS directive)
@@ -129,10 +129,10 @@ angular.module('adf.widget.sensummary')
 
               var nodeBubble = function (d) {
                 switch (d.status) {
-                  case 0: return "sensummary/src/img/circle-green.svg";
-                  case 1: return "sensummary/src/img/circle-yellow.svg";
-                  case 2: return "sensummary/src/img/circle-red.svg";
-                  default: return "sensummary/src/img/circle-grey.svg";
+                  case 0: return "src/img/circle-green.svg";
+                  case 1: return "src/img/circle-yellow.svg";
+                  case 2: return "src/img/circle-red.svg";
+                  default: return "src/img/circle-grey.svg";
                 }
               };
 
@@ -180,27 +180,32 @@ angular.module('adf.widget.sensummary')
     $scope.sensuConfig = true;
 
     var notifyDataChange = function() {
+      console.log('got here');
       $scope.data = data;
       console.log("All node data is loaded.");
       $scope.$apply();
     };
 
     var getClients = new Promise(function(resolve, reject) {
-      $http.get($scope.senserver + "/clients")
-        .success(function(response) {
-          for (var ci in response) {
-            var cname = response[ci].name;
-            var node = {
-              name: cname,
-              status: -1,
-              url: ($scope.uchiwa_url ? ($scope.uchiwa_url + "/" + cname) : null),
-              lastUpdate: "few seconds ago"
-            };
-            data.nodes.push(node);
+      if ($scope.senserver) {
+            $http.get($scope.senserver + "/clients")
+              .success(function(response) {
+                for (var ci in response) {
+                  var cname = response[ci].name;
+                  var node = {
+                    name: cname,
+                    status: -1,
+                    url: ($scope.uchiwa_url ? ($scope.uchiwa_url + "/" + cname) : null),
+                    lastUpdate: "few seconds ago"
+                  };
+                  data.nodes.push(node);
+                }
+                resolve();
+                console.log("Fetched the node list.");
+              })
+          } else {
+            reject('The sensummary widget is not configured yet.');
           }
-          resolve();
-          console.log("Fetched the node list.");
-        })
     });
 
     var getStatus = function() {
@@ -226,8 +231,8 @@ angular.module('adf.widget.sensummary')
     };
 
     getClients
-      .then(getStatus)
-      .then(notifyDataChange);
+      .then(getStatus, function(reason) { return Promise.reject(reason);})
+      .then(notifyDataChange, function(reason) { console.log(reason);});
 
   }]);
 

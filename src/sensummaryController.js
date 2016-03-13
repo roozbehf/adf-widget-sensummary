@@ -11,27 +11,32 @@ angular.module('adf.widget.sensummary')
     $scope.sensuConfig = true;
 
     var notifyDataChange = function() {
+      console.log('got here');
       $scope.data = data;
       console.log("All node data is loaded.");
       $scope.$apply();
     };
 
     var getClients = new Promise(function(resolve, reject) {
-      $http.get($scope.senserver + "/clients")
-        .success(function(response) {
-          for (var ci in response) {
-            var cname = response[ci].name;
-            var node = {
-              name: cname,
-              status: -1,
-              url: ($scope.uchiwa_url ? ($scope.uchiwa_url + "/" + cname) : null),
-              lastUpdate: "few seconds ago"
-            };
-            data.nodes.push(node);
+      if ($scope.senserver) {
+            $http.get($scope.senserver + "/clients")
+              .success(function(response) {
+                for (var ci in response) {
+                  var cname = response[ci].name;
+                  var node = {
+                    name: cname,
+                    status: -1,
+                    url: ($scope.uchiwa_url ? ($scope.uchiwa_url + "/" + cname) : null),
+                    lastUpdate: "few seconds ago"
+                  };
+                  data.nodes.push(node);
+                }
+                resolve();
+                console.log("Fetched the node list.");
+              })
+          } else {
+            reject('The sensummary widget is not configured yet.');
           }
-          resolve();
-          console.log("Fetched the node list.");
-        })
     });
 
     var getStatus = function() {
@@ -57,7 +62,7 @@ angular.module('adf.widget.sensummary')
     };
 
     getClients
-      .then(getStatus)
-      .then(notifyDataChange);
+      .then(getStatus, function(reason) { return Promise.reject(reason);})
+      .then(notifyDataChange, function(reason) { console.log(reason);});
 
   }]);
