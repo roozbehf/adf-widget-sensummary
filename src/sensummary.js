@@ -6,10 +6,10 @@ angular.module('adf.widget.sensummary', ['adf.provider'])
       .widget('sensummary', {
         title: 'Sensummary',
         description: 'Summary of Sensu Check Reports',
-        templateUrl: '{widgetsPath}/sensummary/view.html',
+        templateUrl: '{widgetsPath}/sensummary/src/view.html',
         reload: true,
         edit: {
-          templateUrl: '{widgetsPath}/sensummary/edit.html'
+          templateUrl: '{widgetsPath}/sensummary/src/edit.html'
         },
         config: {
           // senserver: "http://139.162.152.72:4567",

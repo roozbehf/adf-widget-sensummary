@@ -104,10 +104,10 @@ angular.module('adf.widget.sensummary')
 
               var nodeBubble = function (d) {
                 switch (d.status) {
-                  case 0: return "widgets/sensummary/img/circle-green.svg";
-                  case 1: return "widgets/sensummary/img/circle-yellow.svg";
-                  case 2: return "widgets/sensummary/img/circle-red.svg";
-                  default: return "widgets/sensummary/img/circle-grey.svg";
+                  case 0: return "src/img/circle-green.svg";
+                  case 1: return "src/img/circle-yellow.svg";
+                  case 2: return "src/img/circle-red.svg";
+                  default: return "src/img/circle-grey.svg";
                 }
               };
 
