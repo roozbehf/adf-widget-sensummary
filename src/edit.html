@@ -1,6 +1,10 @@
 <form role="form">
   <div class="form-group">
-    <label for="sample">Sample</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.sample" placeholder="Enter sample">
+    <label for="sensuAPI">Sensu API</label>
+    <input type="text" class="form-control" id="sensuAPI" ng-model="config.senserver">
+  </div>
+  <div class="form-group">
+    <label for="uchiwaURL">Uchiwa URL for the Datacenter</label>
+    <input type="text" class="form-control" id="uchiwaURL" ng-model="config.uchiwa_url">
   </div>
 </form>

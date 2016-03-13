@@ -1,4 +1,8 @@
 <div>
-  <h1>Widget view</h1>
-  <p>Content of {{config.sample}}</p>
+  <div class="alert alert-info" ng-if="!data">
+    Please point the widget to a Sensu server in the configuration.
+  </div>
+  <div ng-if="data">
+    <sensu-nodes data="data"></sensu-nodes>
+  </div>
 </div>

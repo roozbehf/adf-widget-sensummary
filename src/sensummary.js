@@ -5,10 +5,17 @@ angular.module('adf.widget.sensummary', ['adf.provider'])
     dashboardProvider
       .widget('sensummary', {
         title: 'Sensummary',
-        description: 'A summary view of Sensu health status',
-        templateUrl: '{widgetsPath}/sensummary/src/view.html',
+        description: 'Summary of Sensu Check Reports',
+        templateUrl: '{widgetsPath}/sensummary/view.html',
+        reload: true,
         edit: {
-          templateUrl: '{widgetsPath}/sensummary/src/edit.html'
-        }
+          templateUrl: '{widgetsPath}/sensummary/edit.html'
+        },
+        config: {
+          // senserver: "http://139.162.152.72:4567",
+          // uchiwa_url: "http://139.162.151.87/uchiwa/#/client/Site%20PoC"
+        },
+        controller: 'sensummaryCtrl',
+        controllerAs: 'swc'
       });
-  });
+  })
